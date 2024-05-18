@@ -22,19 +22,24 @@ def toggle_led(pin):
         led_states[pin] = True
         print(f"LED {led_pins[pin]} ON")
 
+# Clean up GPIO on exit
+def on_closing():
+    GPIO.cleanup()
+    root.destroy()
+
 # Create the Tkinter window
 root = tk.Tk()
-root.title("LED Controller")
+root.title("LED LIGHT CONTROL")
 
 # Create buttons for each LED
 for pin, color in led_pins.items():
     btn = tk.Button(root, text=f"Toggle {color} LED", command=lambda p=pin: toggle_led(p))
     btn.pack(pady=10)
 
-# Clean up GPIO on exit
-def on_closing():
-    GPIO.cleanup()
-    root.destroy()
+# Create Exit button
+exit_btn = tk.Button(root, text="Exit", command=on_closing)
+exit_btn.pack(pady=10)
+
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
 
