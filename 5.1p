@@ -38,5 +38,4 @@ def on_closing():
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
 
-# Start the Tkinter event loop
 root.mainloop()
