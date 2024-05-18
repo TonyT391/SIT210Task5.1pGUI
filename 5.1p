@@ -1,0 +1,42 @@
+import RPi.GPIO as GPIO
+import time
+import tkinter as tk
+
+GPIO.setmode(GPIO.BCM)
+
+# Define LED pins
+led_pins = {17: "blue", 27: "red", 22: "green"}
+led_states = {17: False, 27: False, 22: False}
+
+for led_pin in led_pins:
+    GPIO.setup(led_pin, GPIO.OUT)
+    GPIO.output(led_pin, GPIO.LOW)
+
+def toggle_led(pin):
+    if led_states[pin]:
+        GPIO.output(pin, GPIO.LOW)
+        led_states[pin] = False
+        print(f"LED {led_pins[pin]} OFF")
+    else:
+        GPIO.output(pin, GPIO.HIGH)
+        led_states[pin] = True
+        print(f"LED {led_pins[pin]} ON")
+
+# Create the Tkinter window
+root = tk.Tk()
+root.title("LED Controller")
+
+# Create buttons for each LED
+for pin, color in led_pins.items():
+    btn = tk.Button(root, text=f"Toggle {color} LED", command=lambda p=pin: toggle_led(p))
+    btn.pack(pady=10)
+
+# Clean up GPIO on exit
+def on_closing():
+    GPIO.cleanup()
+    root.destroy()
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
+
+# Start the Tkinter event loop
+root.mainloop()
